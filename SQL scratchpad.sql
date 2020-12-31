@@ -1,4 +1,5 @@
-﻿SELECT accounts.name,web_events.channel,web_events.occurred_at, accounts.primary_poc
+﻿MODULE 2 SOLUTIONS
+SELECT accounts.name,web_events.channel,web_events.occurred_at, accounts.primary_poc
 FROM web_events
 JOIN accounts
 ON web_events.account_id = accounts.id
@@ -73,3 +74,43 @@ SELECT o.occurred_at, a.name, o.total, o.total_amt_usd
            ON a.id = o.account_id
    WHERE o.occurred_at BETWEEN '2015-01-01' AND '2017-01-01'
 ORDER BY o.occurred_at;
+	
+
+
+
+MODULE 3 SOLUTIONS
+
+
+1. Via the video, you might be interested in how to calculate the MEDIAN. Though this is more advanced than what we have covered so far try finding - what is the MEDIAN total_usd spent on all orders?
+SELECT *
+        FROM (SELECT total_amt_usd
+                FROM orders 
+                ORDER BY total_amt_usd  
+                LIMIT 3456) as temp
+   ORDER BY total_amt_usd DESC
+   LIMIT 1;
+	
+
+Which account (by name) placed the earliest order? Your solution should have the account name and the date of the order.
+
+
+SELECT MIN(orders.occurred_at), accounts.name
+FROM orders
+JOIN accounts
+ON orders.account_id = accounts.id 
+GROUP BY accounts.name
+ORDER BY MIN(orders.occurred_at);
+	
+
+Via what channel did the most recent (latest) web_event occur, which account was associated with this web_event? Your query should return only three values - the date, channel, and account name.
+
+
+SELECT w.occurred_at, w.channel, a.name
+FROM web_events AS w
+JOIN accounts AS a
+ON w.account_id = a.id 
+ORDER BY w.occurred_at DESC
+LIMIT 1;
+	
+
+Find the total number of times each type of channel from the web_events was used. Your final table should have two columns - the channel and the number of times the channel was used.
