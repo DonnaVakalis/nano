@@ -222,3 +222,26 @@ JOIN orders AS o
 ON a.id = o.account_id
 GROUP BY a.name 
 HAVING COUNT(o.*) > 20;
+	
+
+
+
+Which account has the most orders?
+SELECT  a.name, COUNT(o.id) num
+FROM accounts AS a
+JOIN orders AS o
+ON a.id = o.account_id
+GROUP BY a.name 
+ORDER BY num DESC
+LIMIT 1;
+	
+
+
+
+Which accounts spent less than 1,000 usd total across all orders?
+SELECT a.name, SUM(o.total_amt_usd) total
+FROM orders AS o
+JOIN accounts AS a
+ON o.account_id = a.id
+GROUP BY a.name
+HAVING SUM(o.total_amt_usd)<1000;
