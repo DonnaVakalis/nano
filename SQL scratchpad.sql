@@ -179,3 +179,46 @@ JOIN region AS r
 ON r.id = s.region_id
 GROUP BY r.name, w.channel
 ORDER BY num_events DESC;
+	
+
+
+
+Use DISTINCT to test if there are any accounts associated with more than one region.
+
+
+COMPARE TWO QUERIES:
+SELECT COUNT(a.name) AS acc, COUNT(r.name) AS reg
+FROM accounts AS a
+JOIN sales_reps AS s
+ON s.id = a.sales_rep_id
+JOIN region AS r
+ON s.region_id = r.id;
+	VS 
+SELECT  DISTINCT a.name AS acc, r.name AS reg
+FROM accounts AS a
+JOIN sales_reps AS s
+ON s.id = a.sales_rep_id
+JOIN region AS r
+ON s.region_id = r.id;
+	(both return 351)
+
+
+Have any sales reps worked on more than one account?
+
+
+SELECT DISTINCT s.name AS rep, a.name AS acc
+FROM accounts AS a
+JOIN sales_reps AS s
+ON a.sales_rep_id = s.id
+ORDER BY rep;
+	
+
+How many accounts have more than 20 orders?
+
+
+SELECT a.name, COUNT(o.*)  
+FROM accounts AS a
+JOIN orders AS o
+ON a.id = o.account_id
+GROUP BY a.name 
+HAVING COUNT(o.*) > 20;
