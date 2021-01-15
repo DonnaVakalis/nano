@@ -245,3 +245,39 @@ JOIN accounts AS a
 ON o.account_id = a.id
 GROUP BY a.name
 HAVING SUM(o.total_amt_usd)<1000;
+	
+
+Which accounts used facebook as a channel to contact customers more than 6 times?
+
+
+SELECT a.name
+FROM accounts AS a
+JOIN web_events AS w
+ON a.id = w.account_id
+WHERE w.channel = 'facebook'
+GROUP BY a.name
+HAVING COUNT(w.id)>6;
+	Which month did Parch & Posey have the greatest sales in terms of total dollars? Are all months evenly represented by the dataset?
+
+
+Which channel was most frequently used by most accounts?
+
+
+SELECT a.name, w.channel, COUNT(*)
+FROM accounts AS a
+JOIN web_events AS w
+ON a.id = w.account_id
+GROUP BY a.name, w.channel
+ORDER BY COUNT(w.id) DESC;
+	
+
+Find the sales in terms of total dollars for all orders in each year, ordered from greatest to least. Do you notice any trends in the yearly sales totals?
+
+
+SELECT DATE_PART('year', occurred_at) order_yr, SUM(total_amt_usd) tot
+FROM orders
+GROUP BY order_yr 
+ORDER BY tot DESC
+	
+
+Which month did Parch & Posey have the greatest sales in terms of total dollars? Are all months evenly represented by the dataset?
