@@ -299,3 +299,45 @@ SELECT DATE_PART('year', occurred_at) order_year, DATE_PART('month', occurred_at
 FROM orders AS o
 GROUP BY order_year, order_month
 ORDER BY order_year DESC
+	
+
+Write a query to display for each order, the account ID, total amount of the order, and the level of the order - ‘Large’ or ’Small’ - depending on if the order is $3000 or more, or smaller than $3000.
+SELECT account_id, total_amt_usd, 
+CASE WHEN total_amt_usd < 3000 THEN 'Small' ELSE 'Large' END AS order_size
+FROM orders
+	
+
+	Write a query to display the number of orders in each of three categories, based on the total number of items in each order. The three categories are: 'At Least 2000', 'Between 1000 and 2000' and 'Less than 1000'.
+SELECT CASE WHEN total>= 2000 THEN 'Lots'
+                        WHEN total< 2000 AND total >1000 THEN 'Some'
+           ELSE 'Few' END AS num_items, COUNT(*) 
+FROM orders
+GROUP BY 1
+	
+
+We would like to understand 3 different levels of customers based on the amount associated with their purchases. The top level includes anyone with a Lifetime Value (total sales of all orders) greater than 200,000 usd. The second level is between 200,000 and 100,000 usd. The lowest level is anyone under 100,000 usd. Provide a table that includes the level associated with each account. You should provide the account name, the total sales of all orders for the customer, and the level. Order with the top spending customers listed first.
+SELECT a.name AS account_name, 
+SUM(total_amt_usd) AS lifetime_value,
+CASE WHEN SUM(total_amt_usd)>= 200000 THEN 'L1'
+WHEN SUM(total_amt_usd)< 200000 AND SUM(total_amt_usd) >100000 THEN 'L2'
+ELSE 'L3' END AS level  
+FROM orders as o
+JOIN accounts as a
+ON o.account_id = a.id
+GROUP BY 1
+ORDER BY lifetime_value DESC
+	
+
+	
+
+We would now like to perform a similar calculation to the first, but we want to obtain the total amount spent by customers only in 2016 and 2017. Keep the same levels as in the previous question. Order with the top spending customers listed first.
+SELECT a.name AS account_name, SUM(total_amt_usd) AS lifetime_value,
+CASE WHEN SUM(total_amt_usd)>= 200000 THEN 'L1'
+WHEN SUM(total_amt_usd)< 200000 AND SUM(total_amt_usd) >100000 THEN 'L2'
+ELSE 'L3' END AS level  
+FROM orders as o
+JOIN accounts as a
+ON o.account_id = a.id
+WHERE DATE_PART('year',o.occurred_at) = 2016  OR DATE_PART('year',o.occurred_at) = 2017
+GROUP BY 1
+ORDER BY lifetime_value DESC
