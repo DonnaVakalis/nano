@@ -284,3 +284,18 @@ SELECT DATE_PART('year', occurred_at) order_yr, SUM(total_amt_usd) tot
 FROM orders
 GROUP BY order_yr 
 ORDER BY tot DESC
+	
+
+Which month did Parch & Posey have the greatest sales in terms of total number of orders? Are all months evenly represented by the dataset?
+SELECT DATE_PART('month', occurred_at) order_month, COUNT(*) num_orders
+FROM orders AS o
+GROUP BY order_month
+ORDER BY num_orders DESC
+	
+
+
+
+SELECT DATE_PART('year', occurred_at) order_year, DATE_PART('month', occurred_at) order_month, COUNT(*) num_orders
+FROM orders AS o
+GROUP BY order_year, order_month
+ORDER BY order_year DESC
