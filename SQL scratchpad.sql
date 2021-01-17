@@ -260,6 +260,12 @@ HAVING COUNT(w.id)>6;
 	Which month did Parch & Posey have the greatest sales in terms of total dollars? Are all months evenly represented by the dataset?
 
 
+SELECT DATE_PART('month', occurred_at) order_month, SUM(total_amt_usd) tot
+FROM orders
+GROUP BY order_month 
+ORDER BY tot DESC
+	
+
 Which channel was most frequently used by most accounts?
 
 
@@ -278,6 +284,3 @@ SELECT DATE_PART('year', occurred_at) order_yr, SUM(total_amt_usd) tot
 FROM orders
 GROUP BY order_yr 
 ORDER BY tot DESC
-	
-
-Which month did Parch & Posey have the greatest sales in terms of total dollars? Are all months evenly represented by the dataset?
