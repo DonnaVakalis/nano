@@ -359,3 +359,17 @@ JOIN sales_reps sr
 ON sr.id = a.sales_rep_id
 GROUP BY 1
 ORDER BY 4 DESC, 3 DESC
+	
+
+MODULE 4
+
+
+Find the daily average of events, by channel
+
+
+SELECT channel, AVG(daily_count) AS avg_daily_events  
+FROM
+(SELECT DATE_TRUNC('day',occurred_at) AS day, channel, COUNT(*) AS daily_count
+FROM web_events
+GROUP BY 1,2) sub
+GROUP BY 1
